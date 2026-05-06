@@ -10,28 +10,29 @@ import { products, brands, flavorCategories, WHATSAPP_NUMBER, type Product } fro
 function StockBadge({ stock }: { stock: number }) {
   if (stock === 0)
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-400 bg-red-400/10 px-2.5 py-1 rounded-full border border-red-400/20">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-400 bg-red-400/10 px-2.5 py-1 rounded-full border border-red-400/20">
         <span className="w-1.5 h-1.5 rounded-full bg-red-400 inline-block" />
         Sin stock
       </span>
     );
   if (stock <= 3)
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20 animate-pulse-slow">
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />⚡ Quedan {stock} unidades
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20 animate-pulse">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+        ⚡ Quedan {stock} en stock
       </span>
     );
   if (stock <= 7)
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded-full border border-yellow-400/20">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded-full border border-yellow-400/20">
         <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 inline-block" />
-        Quedan {stock} unidades
+        Quedan {stock} en stock
       </span>
     );
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full border border-emerald-400/20">
+    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full border border-emerald-400/20">
       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-      En stock · {stock} unidades
+      En stock · {stock} disponibles
     </span>
   );
 }
@@ -39,33 +40,56 @@ function StockBadge({ stock }: { stock: number }) {
 // ──────────────────────────────────────────
 // Product Card
 // ──────────────────────────────────────────
-function ProductCard({ product }: { product: Product }) {
+// Deterministic social proof (no hydration mismatch)
+const VIEWERS  = [8, 12, 5, 23, 7, 15, 4, 19, 11, 6, 14, 9];
+const MINS_AGO = [2, 5, 12, 3, 8, 1, 15, 6, 4, 9, 7, 11];
+
+function ProductCard({ product, large = false }: { product: Product; large?: boolean }) {
+  const idx = (product.id - 1) % 12;
+  const viewers  = VIEWERS[idx];
+  const minsAgo  = MINS_AGO[idx];
+  const soldOut  = product.stock === 0;
+
   const message = encodeURIComponent(
     `Hola! Me interesa el *${product.name} – ${product.flavor}* ($${product.price}). ¿Está disponible?`
   );
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-  const soldOut = product.stock === 0;
 
   return (
-    <article className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.06] bg-[#0e0e1a] hover:border-cyan-400/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(0,0,0,0.5),0_0_0_1px_rgba(0,229,255,0.08)]">
-      {/* Gradient visual */}
-      <div className={`relative h-48 bg-gradient-to-br ${product.gradient} flex items-center justify-center overflow-hidden`}>
+    <article
+      className={`group relative flex flex-col rounded-2xl overflow-hidden
+        border border-white/[0.06] bg-[#0e0e1a]
+        hover:border-cyan-400/30 hover:scale-[1.03]
+        hover:shadow-[0_0_32px_rgba(0,229,255,0.10),0_8px_40px_rgba(0,0,0,0.55)]
+        transition-all duration-300 ease-out`}
+    >
+      {/* ── Image area ── */}
+      <div className={`relative ${large ? "h-60" : "h-52"} bg-gradient-to-br ${product.gradient} flex items-center justify-center overflow-hidden`}>
+        {/* Emoji fallback */}
         <span className="text-7xl drop-shadow-2xl select-none">{product.emoji}</span>
 
-        {product.featured && (
-          <span className="absolute top-3 left-3 text-[10px] font-bold tracking-widest text-black bg-[#00e5ff] px-2 py-0.5 rounded-full uppercase">
-            TOP
-          </span>
-        )}
+        {/* Real image — overlays emoji when it loads */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => { (e.target as HTMLImageElement).style.opacity = "0"; }}
+        />
 
-        {/* Shimmer overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e1a] via-transparent to-transparent opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Tag badge */}
+        <span className="absolute top-3 left-3 z-10 text-[10px] font-bold tracking-widest text-black bg-[#00e5ff] px-2.5 py-0.5 rounded-full shadow-lg">
+          {product.tag}
+        </span>
+
+        {/* Bottom gradient fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e1a] via-[#0e0e1a]/20 to-transparent" />
       </div>
 
-      {/* Content */}
+      {/* ── Content ── */}
       <div className="flex flex-col flex-1 p-5 gap-3">
-        {/* Brand + flavor tags */}
+
+        {/* Brand + category chips */}
         <div className="flex gap-2 flex-wrap">
           <span className="text-[10px] font-semibold tracking-widest uppercase text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full border border-purple-400/20">
             {product.brand}
@@ -75,30 +99,50 @@ function ProductCard({ product }: { product: Product }) {
           </span>
         </div>
 
+        {/* Name + flavor */}
         <div>
-          <h3 className="text-base font-bold text-white leading-snug">{product.name}</h3>
+          <h3 className={`font-bold text-white leading-tight ${large ? "text-lg" : "text-base"}`}>{product.name}</h3>
           <p className="text-sm text-white/50 mt-0.5">{product.flavor}</p>
-          <p className="text-xs text-white/30 mt-1 leading-relaxed">{product.description}</p>
         </div>
 
-        {/* Specs row */}
-        <div className="flex gap-3 text-xs text-white/40 font-mono">
-          <span>{product.puffs.toLocaleString()} puffs</span>
-          <span>·</span>
-          <span>Nic {product.nicotine}</span>
-        </div>
+        {/* Specs */}
+        <p className="text-xs text-white/30 font-mono">
+          {product.puffs.toLocaleString()} puffs &nbsp;·&nbsp; Nic {product.nicotine}
+        </p>
 
+        {/* Social proof */}
+        {!soldOut && (
+          <div className="flex flex-col gap-0.5">
+            <p className="text-[11px] text-white/35 leading-none">👁 {viewers} personas viendo ahora</p>
+            <p className="text-[11px] text-white/35 leading-none">🛒 Comprado hace {minsAgo} min</p>
+          </div>
+        )}
+
+        {/* Stock badge */}
         <StockBadge stock={product.stock} />
 
-        {/* Price + button */}
-        <div className="mt-auto pt-2 flex items-center justify-between gap-3">
-          <div>
-            <span className="text-2xl font-extrabold text-white">${product.price.toFixed(2)}</span>
+        {/* Reviews */}
+        {product.reviews.length > 0 && (
+          <div className="flex flex-col gap-1 pt-2 border-t border-white/[0.05]">
+            {product.reviews.slice(0, 2).map((r, i) => (
+              <p key={i} className="text-[11px] text-white/30 leading-relaxed">
+                <span className="text-white/45 font-semibold">{r.name}:</span>{" "}
+                &ldquo;{r.text}&rdquo;
+              </p>
+            ))}
           </div>
+        )}
+
+        {/* Price + CTA */}
+        <div className="mt-auto pt-2 flex items-center justify-between gap-3">
+          <span className={`font-extrabold text-white ${large ? "text-3xl" : "text-2xl"}`}>
+            ${product.price.toFixed(2)}
+          </span>
+
           {soldOut ? (
             <button
               disabled
-              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white/30 bg-white/5 border border-white/10 cursor-not-allowed"
+              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white/25 bg-white/[0.04] border border-white/[0.08] cursor-not-allowed"
             >
               Sin stock
             </button>
@@ -107,9 +151,9 @@ function ProductCard({ product }: { product: Product }) {
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-black bg-[#25D366] hover:bg-[#20bd5a] active:scale-95 transition-all duration-150 text-center flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(37,211,102,0.25)]"
+              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-black bg-[#25D366] hover:bg-[#1db954] active:scale-95 transition-all duration-150 text-center flex items-center justify-center gap-1.5 shadow-[0_4px_20px_rgba(37,211,102,0.28)]"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
               Comprar
@@ -149,10 +193,7 @@ function Navbar() {
           </a>
         </div>
 
-        <Link
-          href="/admin"
-          className="text-xs font-semibold text-white/20 hover:text-white/50 transition-colors"
-        >
+        <Link href="/admin" className="text-xs font-semibold text-white/20 hover:text-white/50 transition-colors">
           Admin
         </Link>
       </div>
@@ -166,7 +207,6 @@ function Navbar() {
 function Hero({ totalProducts }: { totalProducts: number }) {
   return (
     <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-      {/* Background effects */}
       <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-100" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-20 right-0 w-[400px] h-[400px] bg-cyan-400/5 rounded-full blur-[100px] pointer-events-none" />
@@ -213,20 +253,14 @@ function Hero({ totalProducts }: { totalProducts: number }) {
 // Filter Bar
 // ──────────────────────────────────────────
 function FilterBar({
-  selectedBrand,
-  setSelectedBrand,
-  selectedFlavor,
-  setSelectedFlavor,
-  searchQuery,
-  setSearchQuery,
+  selectedBrand, setSelectedBrand,
+  selectedFlavor, setSelectedFlavor,
+  searchQuery, setSearchQuery,
   total,
 }: {
-  selectedBrand: string;
-  setSelectedBrand: (v: string) => void;
-  selectedFlavor: string;
-  setSelectedFlavor: (v: string) => void;
-  searchQuery: string;
-  setSearchQuery: (v: string) => void;
+  selectedBrand: string; setSelectedBrand: (v: string) => void;
+  selectedFlavor: string; setSelectedFlavor: (v: string) => void;
+  searchQuery: string; setSearchQuery: (v: string) => void;
   total: number;
 }) {
   return (
@@ -325,10 +359,9 @@ export default function HomePage() {
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
-      const matchBrand = selectedBrand === "Todas" || p.brand === selectedBrand;
+      const matchBrand  = selectedBrand  === "Todas" || p.brand === selectedBrand;
       const matchFlavor = selectedFlavor === "Todas" || p.flavorCategory === selectedFlavor;
-      const matchSearch =
-        searchQuery === "" ||
+      const matchSearch = searchQuery === "" ||
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.flavor.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.brand.toLowerCase().includes(searchQuery.toLowerCase());
@@ -336,38 +369,42 @@ export default function HomePage() {
     });
   }, [selectedBrand, selectedFlavor, searchQuery]);
 
-  const featured = useMemo(() => products.filter((p) => p.featured && p.stock > 0), []);
+  const topSellers = useMemo(
+    () => products.filter((p) => p.featured && p.stock > 0).slice(0, 4),
+    []
+  );
+
+  const isFiltering = selectedBrand !== "Todas" || selectedFlavor !== "Todas" || searchQuery !== "";
 
   return (
     <main className="min-h-screen bg-[#080810]">
       <Navbar />
       <Hero totalProducts={products.filter((p) => p.stock > 0).length} />
 
-      {/* Featured */}
-      {featured.length > 0 && selectedBrand === "Todas" && selectedFlavor === "Todas" && searchQuery === "" && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-lg">⚡</span>
-            <h2 className="text-xl font-bold text-white">Más vendidos</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-cyan-400/20 to-transparent" />
+      {/* ── Más vendidos 🔥 ── */}
+      {!isFiltering && topSellers.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
+          {/* Section header */}
+          <div className="flex items-center gap-3 mb-8">
+            <h2 className="text-2xl font-extrabold text-white">Más vendidos 🔥</h2>
+            <div className="flex-1 h-px bg-gradient-to-r from-orange-400/30 to-transparent" />
+            <span className="text-xs text-white/30 font-medium">Este mes</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {featured.map((p) => (
-              <ProductCard key={p.id} product={p} />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {topSellers.map((p) => (
+              <ProductCard key={p.id} product={p} large />
             ))}
           </div>
         </section>
       )}
 
-      {/* Catalog */}
+      {/* ── Full Catalog ── */}
       <section id="catalogo">
         <FilterBar
-          selectedBrand={selectedBrand}
-          setSelectedBrand={setSelectedBrand}
-          selectedFlavor={selectedFlavor}
-          setSelectedFlavor={setSelectedFlavor}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+          selectedBrand={selectedBrand}   setSelectedBrand={setSelectedBrand}
+          selectedFlavor={selectedFlavor} setSelectedFlavor={setSelectedFlavor}
+          searchQuery={searchQuery}       setSearchQuery={setSearchQuery}
           total={filtered.length}
         />
 

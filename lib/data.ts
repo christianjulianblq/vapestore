@@ -11,10 +11,13 @@ export type Product = {
   gradient: string;
   emoji: string;
   description: string;
+  image: string;
+  tag: string;
+  reviews: { name: string; text: string }[];
   featured?: boolean;
 };
 
-export const WHATSAPP_NUMBER = "5214422038170"; // ← Cambia por tu número
+export const WHATSAPP_NUMBER = "5214422038170";
 
 export const products: Product[] = [
   {
@@ -29,7 +32,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-orange-500 via-yellow-400 to-amber-300",
     emoji: "🥭",
+    image: "/vapes/vape1.png",
+    tag: "🔥 Popular",
     description: "Sabor tropical con toque refrescante de hielo",
+    reviews: [
+      { name: "Miguel A.", text: "Sí pega chido 🔥" },
+      { name: "Fer G.", text: "El sabor de mango es brutal" },
+    ],
     featured: true,
   },
   {
@@ -44,7 +53,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-blue-600 via-indigo-500 to-purple-500",
     emoji: "🫐",
+    image: "/vapes/vape2.png",
+    tag: "🔥 Popular",
     description: "Arándano ácido con frambuesa, intensamente jugoso",
+    reviews: [
+      { name: "Valeria M.", text: "Ya compré 3 veces, increíble" },
+      { name: "Luis R.", text: "El mejor sabor que he probado" },
+    ],
     featured: true,
   },
   {
@@ -59,7 +74,12 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-green-400 via-emerald-400 to-teal-400",
     emoji: "🍉",
+    image: "/vapes/vape3.png",
+    tag: "🔥 Popular",
     description: "Sandía fresca con hielo menthol suave",
+    reviews: [
+      { name: "Ana P.", text: "Súper refrescante, lo recomiendo" },
+    ],
     featured: false,
   },
   {
@@ -74,7 +94,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-pink-500 via-rose-400 to-yellow-300",
     emoji: "🍓",
+    image: "/vapes/vape4.png",
+    tag: "🔥 Popular",
     description: "Fresa dulce con plátano cremoso, combinación perfecta",
+    reviews: [
+      { name: "Carlos R.", text: "15000 puffs y dura un chingo" },
+      { name: "Sofía T.", text: "El sabor no cansa, lo uso diario" },
+    ],
     featured: true,
   },
   {
@@ -89,7 +115,12 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-cyan-400 via-sky-400 to-blue-400",
     emoji: "🧊",
+    image: "/vapes/vape5.png",
+    tag: "⚡ Nuevo",
     description: "Menta pura extra fría, sensación ártica",
+    reviews: [
+      { name: "Diego R.", text: "El más frío que he probado" },
+    ],
     featured: false,
   },
   {
@@ -104,7 +135,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-pink-400 via-fuchsia-400 to-purple-400",
     emoji: "🍋",
+    image: "/vapes/vape6.png",
+    tag: "⚡ Nuevo",
     description: "Limonada rosa refrescante con toque dulce",
+    reviews: [
+      { name: "Paola V.", text: "Sabe igualito a la limonada real" },
+      { name: "Rodrigo S.", text: "Muy bueno el sabor, llegó rápido" },
+    ],
     featured: false,
   },
   {
@@ -119,7 +156,12 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-amber-400 via-orange-300 to-red-300",
     emoji: "🍑",
+    image: "/vapes/vape7.png",
+    tag: "🔥 Popular",
     description: "Durazno maduro con hielo, suave y refrescante",
+    reviews: [
+      { name: "Marco L.", text: "El precio más accesible y calidad top" },
+    ],
     featured: false,
   },
   {
@@ -134,7 +176,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-purple-600 via-violet-500 to-purple-400",
     emoji: "🍇",
+    image: "/vapes/vape8.png",
+    tag: "⚡ Nuevo",
     description: "Uva oscura con iceberg menthol explosivo",
+    reviews: [
+      { name: "Ximena F.", text: "El hit es increíble 💯" },
+      { name: "Arturo M.", text: "Nunca me falla, siempre lo pido" },
+    ],
     featured: false,
   },
   {
@@ -149,7 +197,12 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-yellow-800 via-amber-700 to-yellow-600",
     emoji: "🌿",
+    image: "/vapes/vape9.png",
+    tag: "🔥 Popular",
     description: "Sabor tabaco clásico suave, para los puristas",
+    reviews: [
+      { name: "Roberto C.", text: "Sabe natural, no tan dulce" },
+    ],
     featured: false,
   },
   {
@@ -164,7 +217,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-yellow-400 via-orange-400 to-amber-500",
     emoji: "🥭",
+    image: "/vapes/vape1.png",
+    tag: "🔥 Popular",
     description: "Triple dosis de mango, dulce e intenso",
+    reviews: [
+      { name: "Daniela H.", text: "Demasiado rico, pura adicción 😅" },
+      { name: "Oscar N.", text: "El mejor mango del mercado" },
+    ],
     featured: true,
   },
   {
@@ -179,7 +238,12 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-slate-600 via-gray-500 to-slate-400",
     emoji: "🚬",
+    image: "/vapes/vape2.png",
+    tag: "⚡ Nuevo",
     description: "Tabaco con menta fresca, clásico moderno",
+    reviews: [
+      { name: "Gerardo V.", text: "25000 puffs son un chingo 🤯" },
+    ],
     featured: false,
   },
   {
@@ -194,7 +258,13 @@ export const products: Product[] = [
     nicotine: "5%",
     gradient: "from-blue-400 via-violet-400 to-cyan-300",
     emoji: "⚡",
+    image: "/vapes/vape3.png",
+    tag: "⚡ Nuevo",
     description: "Frambuesa azul con limonada, el más largo del mercado",
+    reviews: [
+      { name: "Ivanna C.", text: "Vale cada peso, dura semanas" },
+      { name: "Héctor B.", text: "El sabor no baja ni al final" },
+    ],
     featured: true,
   },
 ];
@@ -202,13 +272,29 @@ export const products: Product[] = [
 export const brands = ["Todas", ...Array.from(new Set(products.map((p) => p.brand)))];
 export const flavorCategories = ["Todas", ...Array.from(new Set(products.map((p) => p.flavorCategory)))];
 
+export const monthlyStats = {
+  revenue: 32450,
+  orders: 128,
+  topProduct: "Geek Bar Pulse",
+  topProductUnits: 42,
+  revenueByProduct: [
+    { name: "Geek Bar Pulse", amount: 6720, pct: 100 },
+    { name: "Lost Mary OS5000", amount: 5250, pct: 78 },
+    { name: "Pastel Cartel X35K", amount: 4840, pct: 72 },
+    { name: "Elf Bar BC5000", amount: 3900, pct: 58 },
+    { name: "SMOK Nord 5", amount: 3200, pct: 48 },
+  ],
+};
+
 export const simulatedSales = [
-  { id: 1, product: "Lost Mary OS5000 – Blueberry", qty: 3, total: 225.0, date: "2026-05-04", customer: "Carlos M." },
-  { id: 2, product: "Elf Bar BC5000 – Watermelon", qty: 2, total: 130.0, date: "2026-05-04", customer: "Valeria G." },
-  { id: 3, product: "Geek Bar Pulse – Strawberry", qty: 1, total: 70.0, date: "2026-05-03", customer: "Diego R." },
-  { id: 4, product: "SMOK Nord 5 – Mango Ice", qty: 4, total: 359.96, date: "2026-05-03", customer: "Lucía P." },
-  { id: 5, product: "Hyde Mag 4500 – Peach Ice", qty: 2, total: 110.0, date: "2026-05-02", customer: "Tomás F." },
-  { id: 6, product: "Lost Mary BM5000 – Triple Mango", qty: 3, total: 234.0, date: "2026-05-02", customer: "Agustina S." },
-  { id: 7, product: "RAZ TN9000 – Grape Ice", qty: 1, total: 85.0, date: "2026-05-01", customer: "Mateo L." },
-  { id: 8, product: "Pastel Cartel X35K", qty: 2, total: 220.0, date: "2026-05-01", customer: "Sofía T." },
+  { id: 1, product: "Geek Bar Pulse – Strawberry Banana", qty: 6, total: 420.0, date: "2026-05-06", customer: "Carlos M." },
+  { id: 2, product: "Lost Mary OS5000 – Blueberry Sour Razz", qty: 4, total: 300.0, date: "2026-05-06", customer: "Valeria G." },
+  { id: 3, product: "Pastel Cartel X35K – Blue Razz", qty: 2, total: 220.0, date: "2026-05-05", customer: "Sofía T." },
+  { id: 4, product: "SMOK Nord 5 – Mango Ice", qty: 3, total: 269.97, date: "2026-05-05", customer: "Lucía P." },
+  { id: 5, product: "Lost Mary BM5000 – Triple Mango", qty: 5, total: 390.0, date: "2026-05-04", customer: "Agustina S." },
+  { id: 6, product: "Elf Bar BC5000 – Watermelon Ice", qty: 4, total: 260.0, date: "2026-05-04", customer: "Diego R." },
+  { id: 7, product: "RAZ TN9000 – Grape Ice", qty: 3, total: 255.0, date: "2026-05-03", customer: "Mateo L." },
+  { id: 8, product: "Hyde Mag 4500 – Peach Ice", qty: 5, total: 275.0, date: "2026-05-03", customer: "Tomás F." },
+  { id: 9, product: "Geek Bar Skyview – Mint Tobacco", qty: 4, total: 288.0, date: "2026-05-02", customer: "Fernanda L." },
+  { id: 10, product: "Funky Republic Ti7000 – Pink Lemonade", qty: 3, total: 240.0, date: "2026-05-02", customer: "Santiago R." },
 ];

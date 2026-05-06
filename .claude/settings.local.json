@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "mcp__Claude_Preview__preview_start",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(gh auth *)",
+      "mcp__ed7f0e43-139a-4f24-b053-3edf0d1a1fac__list_teams",
+      "mcp__ed7f0e43-139a-4f24-b053-3edf0d1a1fac__list_projects",
+      "Bash(gh repo *)",
+      "Bash(git push *)",
+      "mcp__ed7f0e43-139a-4f24-b053-3edf0d1a1fac__deploy_to_vercel",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami *)",
+      "Bash(vercel deploy *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }
