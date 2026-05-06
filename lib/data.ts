@@ -286,6 +286,13 @@ export const monthlyStats = {
   ],
 };
 
+export const weeklyStats = [
+  { week: "Sem 1", amount: 6200,  pct: 55 },
+  { week: "Sem 2", amount: 8100,  pct: 72 },
+  { week: "Sem 3", amount: 11300, pct: 100 },
+  { week: "Sem 4", amount: 6850,  pct: 61 },
+];
+
 export const simulatedSales = [
   { id: 1, product: "Geek Bar Pulse – Strawberry Banana", qty: 6, total: 420.0, date: "2026-05-06", customer: "Carlos M." },
   { id: 2, product: "Lost Mary OS5000 – Blueberry Sour Razz", qty: 4, total: 300.0, date: "2026-05-06", customer: "Valeria G." },

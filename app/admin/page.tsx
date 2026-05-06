@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { products as initialProducts, simulatedSales, monthlyStats, type Product } from "@/lib/data";
+import { products as initialProducts, simulatedSales, monthlyStats, weeklyStats, type Product } from "@/lib/data";
 
 // ──────────────────────────────────────────
 // Auth gate (UI only)
@@ -223,29 +223,51 @@ function Dashboard() {
         {activeTab === "overview" && (
           <div className="grid lg:grid-cols-2 gap-6">
 
-            {/* Revenue by product (CSS bars) */}
-            <div className="bg-[#0e0e1a] border border-white/[0.06] rounded-2xl p-5">
-              <h3 className="text-sm font-bold text-white mb-5 flex items-center gap-2">
-                <span>📊</span> Ingresos por producto
-              </h3>
-              <div className="flex flex-col gap-4">
-                {monthlyStats.revenueByProduct.map((item, i) => (
-                  <div key={item.name}>
-                    <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-xs text-white/60 flex items-center gap-1.5">
-                        <span className="text-white/25 font-mono text-[10px]">#{i + 1}</span>
-                        {item.name}
+            {/* Left column: weekly bars + revenue by product */}
+            <div className="flex flex-col gap-4">
+              {/* Weekly bar chart */}
+              <div className="bg-[#0e0e1a] border border-white/[0.06] rounded-2xl p-5">
+                <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+                  <span>📈</span> Ventas por semana
+                </h3>
+                <div className="flex items-end gap-3 h-28">
+                  {weeklyStats.map((w) => (
+                    <div key={w.week} className="flex flex-col items-center gap-2 flex-1">
+                      <span className="text-[10px] font-bold text-white/50">
+                        ${(w.amount / 1000).toFixed(1)}k
                       </span>
-                      <span className="text-xs font-bold text-white">${item.amount.toLocaleString()}</span>
+                      <div className="w-full rounded-t-lg bg-gradient-to-t from-cyan-500 to-purple-500 shadow-[0_0_12px_rgba(0,229,255,0.2)] transition-all duration-700"
+                        style={{ height: `${w.pct}%` }} />
+                      <span className="text-[10px] text-white/30">{w.week}</span>
                     </div>
-                    <div className="h-2 bg-white/[0.05] rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 transition-all duration-700"
-                        style={{ width: `${item.pct}%` }}
-                      />
+                  ))}
+                </div>
+              </div>
+
+              {/* Revenue by product (horizontal bars) */}
+              <div className="bg-[#0e0e1a] border border-white/[0.06] rounded-2xl p-5">
+                <h3 className="text-sm font-bold text-white mb-5 flex items-center gap-2">
+                  <span>📊</span> Ingresos por producto
+                </h3>
+                <div className="flex flex-col gap-4">
+                  {monthlyStats.revenueByProduct.map((item, i) => (
+                    <div key={item.name}>
+                      <div className="flex justify-between items-center mb-1.5">
+                        <span className="text-xs text-white/60 flex items-center gap-1.5">
+                          <span className="text-white/25 font-mono text-[10px]">#{i + 1}</span>
+                          {item.name}
+                        </span>
+                        <span className="text-xs font-bold text-white">${item.amount.toLocaleString()}</span>
+                      </div>
+                      <div className="h-2 bg-white/[0.05] rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 transition-all duration-700"
+                          style={{ width: `${item.pct}%` }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
