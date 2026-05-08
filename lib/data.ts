@@ -17,7 +17,7 @@ export type Product = {
   featured?: boolean;
 };
 
-export const WHATSAPP_NUMBER = "5214422038170";
+export const WHATSAPP_NUMBER = "5217298677084";
 
 export const products: Product[] = [
   {
